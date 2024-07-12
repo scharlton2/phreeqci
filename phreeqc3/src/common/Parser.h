@@ -2,8 +2,15 @@
 #define PARSER_H_INCLUDED
 #if defined(WIN32)
 #  if defined(PHREEQCI_GUI)
-#    ifndef WINVER
-#      define WINVER 0x0400
+#    if _MSC_VER == 1400   // (Visual Studio 2005 version 8.0)
+#      ifndef WINVER
+#        define WINVER 0x0400
+#      endif
+#    endif
+#    if _MSC_VER == 1500   // (Visual Studio 2008 version 9.0)
+#      ifndef WINVER
+#        define WINVER 0x0600
+#      endif
 #    endif
 #    include <afx.h>
 #  endif

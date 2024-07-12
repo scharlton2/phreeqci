@@ -12,21 +12,41 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#if _MSC_VER >= 1400
+#if _MSC_VER == 1400              // (Visual Studio 2005 version 8.0)
 // Modify the following defines if you have to target a platform prior to the ones specified below.
 // Refer to MSDN for the latest info on corresponding values for different platforms.
-#ifndef WINVER				// Allow use of features specific to Windows 95 and Windows NT 4 or later.
-#define WINVER 0x0400		// Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
-#endif
+#  ifndef WINVER                  // Allow use of features specific to Windows 95 and Windows NT 4 or later.
+#    define WINVER 0x0400         // Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
+#  endif
 
-#ifndef _WIN32_WINNT		// Allow use of features specific to Windows NT 4 or later.
-#define _WIN32_WINNT 0x0400		// Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
-#endif						
+#  ifndef _WIN32_WINNT            // Allow use of features specific to Windows NT 4 or later.
+#    define _WIN32_WINNT 0x0500	  // Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
+#  endif						
 
-#ifndef _WIN32_WINDOWS		// Allow use of features specific to Windows 98 or later.
-#define _WIN32_WINDOWS 0x0410 // Change this to the appropriate value to target Windows Me or later.
-#endif
-#endif /* _MSC_VER >= 1400 */
+#  ifndef _WIN32_WINDOWS		  // Allow use of features specific to Windows 98 or later.
+#    define _WIN32_WINDOWS 0x0410 // Change this to the appropriate value to target Windows Me or later.
+#  endif
+#endif /* _MSC_VER == 1400 */
+
+#if _MSC_VER == 1500              // (Visual Studio 2008 version 9.0)
+// Modify the following defines if you have to target a platform prior to the ones specified below.
+// Refer to MSDN for the latest info on corresponding values for different platforms.
+#  ifndef WINVER                  // Specifies that the minimum required platform is Windows Vista.
+#    define WINVER 0x0600         // Change this to the appropriate value to target other versions of Windows.
+#  endif
+
+#  ifndef _WIN32_WINNT            // Specifies that the minimum required platform is Windows Vista.
+#    define _WIN32_WINNT 0x0600   // Change this to the appropriate value to target other versions of Windows.
+#  endif
+
+#  ifndef _WIN32_WINDOWS          // Specifies that the minimum required platform is Windows 98.
+#    define _WIN32_WINDOWS 0x0410 // Change this to the appropriate value to target Windows Me or later.
+#  endif
+
+#  ifndef _WIN32_IE               // Specifies that the minimum required platform is Internet Explorer 7.0.
+#    define _WIN32_IE 0x0700      // Change this to the appropriate value to target other versions of IE.
+#  endif
+#endif /* _MSC_VER == 1500 */
 
 #define VC_EXTRALEAN        // Exclude rarely-used stuff from Windows headers
 
