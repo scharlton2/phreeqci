@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="PhreeqciCA"
+	Name="PhreeqciCA.vs2008"
 	ProjectGUID="{022EE8AC-F0B2-49A6-A072-44351E3837BC}"
 	RootNamespace="PhreeqciCA"
 	Keyword="Win32Proj"
