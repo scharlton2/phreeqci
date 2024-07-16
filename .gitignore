@@ -51,3 +51,12 @@
 # /msi/
 /msi/bin
 /msi/obj
+
+# .vs
+/.vs/phreeqci2
+
+# .vshistory
+/.vshistory
+
+# build directories beginning with _
+/_*
