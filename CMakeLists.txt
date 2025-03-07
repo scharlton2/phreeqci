@@ -6,6 +6,10 @@ project(phreeqci2 VERSION 0.1.0 LANGUAGES C CXX)
 configure_file(phreeqc3/database/phreeqc.dat database/phreeqc.dat COPYONLY)
 ##configure_file(phreeqci.eng phreeqci.eng COPYONLY)
 
+if (NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
+  message(FATAL_ERROR "Phreeqc Interactive must be compiled as 32-bit")
+endif()
+
 # Find the MFC libraries
 find_package(MFC REQUIRED)
 
