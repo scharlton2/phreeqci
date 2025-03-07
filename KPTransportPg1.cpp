@@ -961,6 +961,7 @@ void CKPTransportPg2::OnItemchanged(NM_LISTVIEW* pNMListView, CCheckListCtrl& ch
 					setRanges.insert(insert);
 				}
 
+#if _MSC_VER <= 1400  // VS2005 (8.0)
 				// check for ranges that can be merged
 				std::set<CRange>::iterator iter = setRanges.begin();
 				std::set<CRange>::iterator prev = iter++;
@@ -974,6 +975,35 @@ void CKPTransportPg2::OnItemchanged(NM_LISTVIEW* pNMListView, CCheckListCtrl& ch
 						if (iter == setRanges.end()) break;
 					}
 				}
+#else
+				// This should work on VS2015 (14.0) and higher
+				// but has only been tested on VS2019 (16.x)
+				for (auto iter = std::next(setRanges.begin()); iter != setRanges.end();)
+				{
+					auto prev = std::prev(iter);
+
+					if (prev->nMax + 1 == iter->nMin)
+					{
+						// Create a new merged range
+						CRange mergedRange = *prev;
+						mergedRange.nMax = iter->nMax;
+
+						// Erase the old ranges
+						setRanges.erase(prev);
+						iter = setRanges.erase(iter);
+
+						// Insert the merged range
+						iter = setRanges.insert(mergedRange).first;
+
+						// Ensure we continue from the correct place
+						iter = std::next(iter);
+					}
+					else
+					{
+						++iter;
+					}
+				}
+#endif
 
 				// write ranges to grid
 				std::set<CRange>::const_iterator cIter = setRanges.begin();

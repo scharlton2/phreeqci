@@ -722,6 +722,7 @@ void CKPAdvectionPg2::OnItemchanged(NM_LISTVIEW* pNMListView, CCheckListCtrl& ch
 					setRanges.insert(insert);
 				}
 
+#if 0
 				// check for ranges that can be merged
 				std::set<CRange>::iterator iter = setRanges.begin();
 				std::set<CRange>::iterator prev = iter++;
@@ -733,6 +734,34 @@ void CKPAdvectionPg2::OnItemchanged(NM_LISTVIEW* pNMListView, CCheckListCtrl& ch
 						iter = setRanges.erase(iter);
 					}
 				}
+#else
+				for (auto iter = std::next(setRanges.begin()); iter != setRanges.end();)
+				{
+					auto prev = std::prev(iter);
+
+					if (prev->nMax + 1 == iter->nMin)
+					{
+						// Move prev range, update its max, and remove old ranges
+						//CRange mergedRange = std::move(*prev);
+						CRange mergedRange = *prev;
+						mergedRange.nMax = iter->nMax;
+
+						setRanges.erase(prev);
+						iter = setRanges.erase(iter);
+
+						// Insert merged range and update iterator
+						iter = setRanges.insert(std::move(mergedRange)).first;
+
+						// Ensure we continue from the correct place
+						iter = std::next(iter);
+					}
+					else
+					{
+						++iter;
+					}
+				}
+
+#endif
 
 				// write ranges to grid
 				std::set<CRange>::const_iterator cIter = setRanges.begin();
