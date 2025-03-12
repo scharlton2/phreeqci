@@ -161,7 +161,7 @@ void COCKSSave::ParseString(CString strKey)
 
 }
 
-int COCKSSave::DoModal() 
+INT_PTR COCKSSave::DoModal()
 {
 	int nReturn = baseOCKSSave::DoModal();
 

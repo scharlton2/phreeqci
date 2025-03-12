@@ -40,7 +40,7 @@ public:
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(COCKSSave)
 	public:
-	virtual int DoModal();
+	virtual INT_PTR DoModal();
 	//}}AFX_VIRTUAL
 
 // Implementation

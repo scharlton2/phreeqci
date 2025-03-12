@@ -163,7 +163,7 @@ void COCKSUse::ParseString(const CString& str)
 	}
 }
 
-int COCKSUse::DoModal() 
+INT_PTR COCKSUse::DoModal()
 {
 	int nReturn = baseOCKSUse::DoModal();
 

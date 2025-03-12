@@ -54,7 +54,7 @@ END_MESSAGE_MAP()
 
 
 
-int CRichDocInSheet::DoModal() 
+INT_PTR CRichDocInSheet::DoModal()
 {
 	int nDoModal = baseRichDocInSheet::DoModal();
 

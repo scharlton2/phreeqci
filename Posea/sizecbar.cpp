@@ -455,7 +455,7 @@ void CSizingControlBar::OnNcPaint()
     dc.IntersectClipRect(rcDraw);
 
     // erase NC background the hard way
-    HBRUSH hbr = (HBRUSH)GetClassLong(m_hWnd, GCL_HBRBACKGROUND);
+    HBRUSH hbr = (HBRUSH)GetClassLong(m_hWnd, GCLP_HBRBACKGROUND);
     ::FillRect(dc.m_hDC, rcDraw, hbr);
 
     if (m_dwSCBStyle & SCBS_SHOWEDGES)

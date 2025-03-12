@@ -642,7 +642,9 @@ void CTreeCtrlIn::OnEditKeyword()
 		pKeywordSheet = new CKSSIT();
 		break;
 	case user_graphImage :
+#if defined(__cplusplus_cli)
 		pKeywordSheet = new CUserGraph();
+#endif
 		break;
 	case reaction_pressureImage :
 		pKeywordSheet = new CReaction_Pressure();

@@ -1,13 +1,15 @@
-cmake_minimum_required(VERSION 3.16) # target_precompile_headers
+# cmake_minimum_required(VERSION 3.16) # target_precompile_headers
+# cmake_minimum_required(VERSION 3.12) # COMMON_LANGUAGE_RUNTIME (VS 2010 and above)
+cmake_minimum_required(VERSION 3.11)
 
 project(phreeqci2 VERSION 0.1.0 LANGUAGES C CXX)
 
 # copy necessary files into build directory
 configure_file(phreeqc3/database/phreeqc.dat database/phreeqc.dat COPYONLY)
-##configure_file(phreeqci.eng phreeqci.eng COPYONLY)
+configure_file(phreeqci.eng phreeqci.eng COPYONLY)
 
 if (NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
-  message(FATAL_ERROR "Phreeqc Interactive must be compiled as 32-bit")
+  message(FATAL_ERROR "Phreeqc Interactive must be compiled as 32-bit (Use -A Win32)")
 endif()
 
 # Find the MFC libraries
@@ -17,6 +19,9 @@ find_package(MFC REQUIRED)
 # 1 -> static MFC library
 # 2 -> shared MFC library
 set(CMAKE_MFC_FLAG 2)
+
+#
+option(ENABLE_ZEDGRAPH "Enable ZedGraph (Requires CLR)" ON)
 
 add_executable(phreeqci)
 
@@ -473,9 +478,11 @@ target_sources(phreeqci
     phreeqc3/src/Exchange.h
     phreeqc3/src/ExchComp.cxx
     phreeqc3/src/ExchComp.h
+    #{{
     phreeqc3/src/Form1.2005.resX
     phreeqc3/src/Form1.h
     phreeqc3/src/Form1.resX
+    #}}
     phreeqc3/src/GasComp.cxx
     phreeqc3/src/GasComp.h
     phreeqc3/src/gases.cpp
@@ -596,25 +603,53 @@ target_sources(phreeqci
 
 target_compile_definitions(phreeqci
   PRIVATE
-    PHREEQCI_GUI
+    _AFXDLL
     NO_UTF8_ENCODING
+    PHREEQCI_GUI
+    WINVER=0x0A00
+    _WIN32_WINNT=0x0A00
 )
 
-#{{TODO
-if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1920))
-  # VS2019
+if (ENABLE_ZEDGRAPH)
   target_compile_definitions(phreeqci
     PRIVATE
-      WINVER=0x0501
-      _WIN32_WINNT=_WIN32_WINNT_WINXP
+      MULTICHART
   )
 endif()
-#}}TODO
 
-target_precompile_headers(phreeqci
-  PRIVATE
-    StdAfx.h
-)
+# #{{TODO
+# if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1920))
+#   # VS2019
+#   # target_compile_definitions(phreeqci
+#   #   PRIVATE
+#   #     WINVER=0x0501
+#   #     _WIN32_WINNT=_WIN32_WINNT_WINXP
+#   # )
+
+#   # target_compile_definitions(phreeqci
+#   #   PRIVATE
+#   #     WINVER=_WIN32_WINNT_WIN10
+#   #     _WIN32_WINNT=_WIN32_WINNT_WIN10
+#   # )
+
+#   target_compile_definitions(phreeqci
+#     PRIVATE
+#       WINVER=0x0A00
+#       _WIN32_WINNT=0x0A00
+#   )
+
+# endif()
+# #}}TODO
+
+
+if(CMAKE_VERSION VERSION_LESS "3.16")
+  # target_sources(phreeqci PRIVATE StdAfx.cpp)
+else()
+  target_precompile_headers(phreeqci
+    PRIVATE
+      StdAfx.h
+  )
+endif()
 
 target_include_directories(phreeqci
   PRIVATE
@@ -634,13 +669,19 @@ target_link_libraries(phreeqci
     HtmlHelp.lib
 )
 
+# Setup references for /CLR
+if (ENABLE_ZEDGRAPH)
+  set_target_properties(phreeqci PROPERTIES COMMON_LANGUAGE_RUNTIME "")
+  set_target_properties(phreeqci PROPERTIES DOTNET_TARGET_FRAMEWORK_VERSION "v4.0.30319")
+  set_target_properties(phreeqci PROPERTIES VS_DOTNET_REFERENCES "System;System.Drawing;System.Windows.Forms;${CMAKE_CURRENT_SOURCE_DIR}/phreeqc3/src/ZedGraph.dll")
+endif()
 
 # <CONFIG>_POSTFIX
 # Postfix to append to the target file name for configuration <CONFIG>.
 # Properties->Configuration Properties->General->Target Name
-set_target_properties(phreeqci PROPERTIES MINSIZEREL_POSTFIX m )
-set_target_properties(phreeqci PROPERTIES RELWITHDEBINFO_POSTFIX rd )
-set_target_properties(phreeqci PROPERTIES DEBUG_POSTFIX d )
+set_target_properties(phreeqci PROPERTIES MINSIZEREL_POSTFIX m)
+set_target_properties(phreeqci PROPERTIES RELWITHDEBINFO_POSTFIX rd)
+set_target_properties(phreeqci PROPERTIES DEBUG_POSTFIX d)
 
 # Set the character set to Unicode
 # Properties->Configuration Properties->Advanced->Character Set=Use Unicode Character Set

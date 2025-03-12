@@ -700,7 +700,7 @@ void CRunDlg::OnSelchangeCboDatabase()
 	UpdateSetAsDefault();
 }
 
-int CRunDlg::DoModal() 
+INT_PTR CRunDlg::DoModal()
 {
 	int nDoModal = baseRunDlg::DoModal();
 
