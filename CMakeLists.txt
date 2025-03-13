@@ -1,6 +1,6 @@
-# cmake_minimum_required(VERSION 3.16) # target_precompile_headers
+cmake_minimum_required(VERSION 3.16) # target_precompile_headers VS_DPI_AWARE
 # cmake_minimum_required(VERSION 3.12) # COMMON_LANGUAGE_RUNTIME (VS 2010 and above)
-cmake_minimum_required(VERSION 3.11)
+# cmake_minimum_required(VERSION 3.11)
 
 project(phreeqci2 VERSION 0.1.0 LANGUAGES C CXX)
 
@@ -20,7 +20,7 @@ find_package(MFC REQUIRED)
 # 2 -> shared MFC library
 set(CMAKE_MFC_FLAG 2)
 
-#
+# Enable Zedgraph by default
 option(ENABLE_ZEDGRAPH "Enable ZedGraph (Requires CLR)" ON)
 
 add_executable(phreeqci)
@@ -606,8 +606,8 @@ target_compile_definitions(phreeqci
     _AFXDLL
     NO_UTF8_ENCODING
     PHREEQCI_GUI
-    WINVER=0x0A00
-    _WIN32_WINNT=0x0A00
+    # WINVER=0x0A00
+    # _WIN32_WINNT=0x0A00
 )
 
 if (ENABLE_ZEDGRAPH)
@@ -618,27 +618,40 @@ if (ENABLE_ZEDGRAPH)
 endif()
 
 # #{{TODO
-# if ((MSVC) AND (MSVC_VERSION GREATER_EQUAL 1920))
-#   # VS2019
-#   # target_compile_definitions(phreeqci
-#   #   PRIVATE
-#   #     WINVER=0x0501
-#   #     _WIN32_WINNT=_WIN32_WINNT_WINXP
-#   # )
-
-#   # target_compile_definitions(phreeqci
-#   #   PRIVATE
-#   #     WINVER=_WIN32_WINNT_WIN10
-#   #     _WIN32_WINNT=_WIN32_WINNT_WIN10
-#   # )
-
+if (MSVC_VERSION GREATER_EQUAL 1920)
+  # VS2019 VS 16.0 (v142 toolset)
+  # MFC(x86) reqs at least WINVER=0x0501
+  target_compile_definitions(phreeqci
+    PRIVATE
+      WINVER=0x0501
+      _WIN32_WINNT=_WIN32_WINNT_WINXP
+  )
+# elseif(MSVC_VERSION GREATER_EQUAL 1910)
+#   # VS2017 VS 15.0 (v141 toolset)
 #   target_compile_definitions(phreeqci
 #     PRIVATE
 #       WINVER=0x0A00
-#       _WIN32_WINNT=0x0A00
+#       _WIN32_WINNT=_WIN32_WINNT_WIN10
+#   )
+# elseif(MSVC_VERSION GREATER_EQUAL 1900)
+#   # VS2015 VS 14.0 (v140 toolset)
+#   target_compile_definitions(phreeqci
+#     PRIVATE
+#       WINVER=0x0A00
+#       _WIN32_WINNT=_WIN32_WINNT_WIN10
 #   )
 
-# endif()
+elseif(MSVC_VERSION GREATER_EQUAL 1800)
+  # VS2013 VS 12.0 (v120 toolset)
+  target_compile_definitions(phreeqci
+    PRIVATE
+      WINVER=0x0501
+      _WIN32_WINNT=_WIN32_WINNT_WINXP
+  )
+
+else()
+  message(FATAL_ERROR "This hasn't been tested")
+endif()
 # #}}TODO
 
 
@@ -669,10 +682,12 @@ target_link_libraries(phreeqci
     HtmlHelp.lib
 )
 
+# Fix blurry display on high DPI screens (Reqs CMake 3.16 or higher)
+set_property(TARGET phreeqci PROPERTY VS_DPI_AWARE "PerMonitor")
+
 # Setup references for /CLR
 if (ENABLE_ZEDGRAPH)
   set_target_properties(phreeqci PROPERTIES COMMON_LANGUAGE_RUNTIME "")
-  set_target_properties(phreeqci PROPERTIES DOTNET_TARGET_FRAMEWORK_VERSION "v4.0.30319")
   set_target_properties(phreeqci PROPERTIES VS_DOTNET_REFERENCES "System;System.Drawing;System.Windows.Forms;${CMAKE_CURRENT_SOURCE_DIR}/phreeqc3/src/ZedGraph.dll")
 endif()
 
