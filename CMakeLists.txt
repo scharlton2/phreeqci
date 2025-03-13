@@ -20,6 +20,17 @@ find_package(MFC REQUIRED)
 # 2 -> shared MFC library
 set(CMAKE_MFC_FLAG 2)
 
+# Check for ATL
+include(CheckIncludeFileCXX)
+check_include_file_cxx("atlbase.h" HAVE_ATL)
+
+if(HAVE_ATL)
+  message(STATUS "ATL is installed.")
+else()
+  message(FATAL_ERROR "ATL is not installed.")
+endif()
+
+
 # Enable Zedgraph by default
 option(ENABLE_ZEDGRAPH "Enable ZedGraph (Requires CLR)" ON)
 
