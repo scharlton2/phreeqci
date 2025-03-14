@@ -66,3 +66,10 @@ _*/
 
 # Visual Studio cache directory
 .vs/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
