@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.16) # target_precompile_headers VS_DPI_AWARE
+if (MSVC_VERSION GREATER_EQUAL 1500)
+  cmake_minimum_required(VERSION 3.16) # target_precompile_headers VS_DPI_AWARE
 # cmake_minimum_required(VERSION 3.12) # COMMON_LANGUAGE_RUNTIME (VS 2010 and above)
-# cmake_minimum_required(VERSION 3.11)
+else()
+  # VS2005
+  cmake_minimum_required(VERSION 3.11)
+endif()
 
 project(phreeqci VERSION 0.1.0 LANGUAGES C CXX)
 
@@ -30,9 +34,12 @@ else()
   message(FATAL_ERROR "ATL is not installed.")
 endif()
 
-
-# Enable Zedgraph by default
-option(ENABLE_ZEDGRAPH "Enable ZedGraph (Requires CLR)" ON)
+if(MSVC_VERSION VERSION_LESS 1600)
+  message(WARNING "CMake support for ZedGraph (CLR) requires Visual Studio 2010 or higher")
+else()
+  # Enable Zedgraph by default
+  option(ENABLE_ZEDGRAPH "Enable ZedGraph (Requires CLR)" ON)
+endif()
 
 add_executable(phreeqci)
 
@@ -628,57 +635,29 @@ if (ENABLE_ZEDGRAPH)
   )
 endif()
 
-# #{{TODO
-if (MSVC_VERSION GREATER_EQUAL 1920)
-  # VS2019 VS 16.0 (v142 toolset)
-  # MFC(x86) reqs at least WINVER=0x0501
-  target_compile_definitions(phreeqci
-    PRIVATE
-      WINVER=0x0501
-      _WIN32_WINNT=_WIN32_WINNT_WINXP
-  )
-# elseif(MSVC_VERSION GREATER_EQUAL 1910)
-#   # VS2017 VS 15.0 (v141 toolset)
-#   target_compile_definitions(phreeqci
-#     PRIVATE
-#       WINVER=0x0A00
-#       _WIN32_WINNT=_WIN32_WINNT_WIN10
-#   )
-# elseif(MSVC_VERSION GREATER_EQUAL 1900)
-#   # VS2015 VS 14.0 (v140 toolset)
-#   target_compile_definitions(phreeqci
-#     PRIVATE
-#       WINVER=0x0A00
-#       _WIN32_WINNT=_WIN32_WINNT_WIN10
-#   )
-
-elseif(MSVC_VERSION GREATER_EQUAL 1800)
-  # VS2013 VS 12.0 (v120 toolset)
-  target_compile_definitions(phreeqci
-    PRIVATE
-      WINVER=0x0501
-      _WIN32_WINNT=_WIN32_WINNT_WINXP
-  )
-
-##elseif(MSVC_VERSION GREATER_EQUAL 1700) # VS2012
-##elseif(MSVC_VERSION GREATER_EQUAL 1600) # VS2010
-elseif(MSVC_VERSION GREATER_EQUAL 1500) # VS2008
-
-  # use SDKDDKVer.h to set WINVER/_WIN32_WINNT/_WIN32_IE
-
-else()
-  message(FATAL_ERROR "This hasn't been tested")
-endif()
-# #}}TODO
-
-
-if(CMAKE_VERSION VERSION_LESS "3.16")
-  # target_sources(phreeqci PRIVATE StdAfx.cpp)
-else()
+# Precompiled headers
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.16")
+  # Setup precompiled headers automatically
   target_precompile_headers(phreeqci
+  PRIVATE
+    StdAfx.h
+  )
+else()
+  # Setup precompiled headers manually
+  target_compile_options(phreeqci
     PRIVATE
+      "/YuStdAfx.h"
+  )
+  target_sources(phreeqci
+    PRIVATE
+      StdAfx.cpp
       StdAfx.h
   )
+  target_compile_options(phreeqci
+    PRIVATE
+      "/FIStdAfx.h"
+  )
+  set_source_files_properties(StdAfx.cpp PROPERTIES COMPILE_FLAGS "/YcStdAfx.h")
 endif()
 
 target_include_directories(phreeqci
