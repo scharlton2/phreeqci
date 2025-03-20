@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16) # target_precompile_headers VS_DPI_AWARE
 # cmake_minimum_required(VERSION 3.12) # COMMON_LANGUAGE_RUNTIME (VS 2010 and above)
 # cmake_minimum_required(VERSION 3.11)
 
-project(phreeqci2 VERSION 0.1.0 LANGUAGES C CXX)
+project(phreeqci VERSION 0.1.0 LANGUAGES C CXX)
 
 # copy necessary files into build directory
 configure_file(phreeqc3/database/phreeqc.dat database/phreeqc.dat COPYONLY)
@@ -490,9 +490,9 @@ target_sources(phreeqci
     phreeqc3/src/ExchComp.cxx
     phreeqc3/src/ExchComp.h
     #{{
-    phreeqc3/src/Form1.2005.resX
-    phreeqc3/src/Form1.h
-    phreeqc3/src/Form1.resX
+    # phreeqc3/src/Form1.2005.resX
+    # phreeqc3/src/Form1.h
+    # phreeqc3/src/Form1.resX
     #}}
     phreeqc3/src/GasComp.cxx
     phreeqc3/src/GasComp.h

@@ -11,6 +11,7 @@
 #include "OCKSTransport.h"
 #include "SaveCurrentDirectory.h"
 
+#include <iterator>
 
 #ifdef _DEBUG
 #undef THIS_FILE
