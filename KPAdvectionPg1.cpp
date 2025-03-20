@@ -724,7 +724,8 @@ void CKPAdvectionPg2::OnItemchanged(NM_LISTVIEW* pNMListView, CCheckListCtrl& ch
 					setRanges.insert(insert);
 				}
 
-#if _MSC_VER >= 1900  // VS2015 (14.0)
+//#if _MSC_VER >= 1900  // VS2015 (14.0)
+#if _MSC_VER >= 1800  // VS2013 (12.0)
 				// This is expected to work on VS2015 (14.0) and later, 
 				// but it has only been tested on VS2019 (16.x).
 				for (auto iter = std::next(setRanges.begin()); iter != setRanges.end();)
