@@ -12,6 +12,33 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+//{{
+#if _MSC_VER >= 1500  // Visual Studio 2008 [9.0]
+// simulate targetver.h
+// sets WINVER _WIN32_WINNT _WIN32_WINDOWS
+#include <SDKDDKVer.h>
+
+#ifndef WINVER
+#error WINVER not set after including SDKDDKVer.h
+#endif
+
+#ifndef WINVER
+#error WINVER not set after including SDKDDKVer.h
+#endif
+
+#ifndef _WIN32_WINNT
+#error _WIN32_WINNT not set after including SDKDDKVer.h
+#endif
+
+// _WIN32_WINDOWS was replaced by _WIN32_WINNT
+
+#ifndef _WIN32_IE
+#error _WIN32_IE not set after including SDKDDKVer.h
+#endif
+
+#endif
+//}}
+
 #if _MSC_VER >= 1400
 // Modify the following defines if you have to target a platform prior to the ones specified below.
 // Refer to MSDN for the latest info on corresponding values for different platforms.
