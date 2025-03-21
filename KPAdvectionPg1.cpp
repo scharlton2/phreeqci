@@ -725,8 +725,8 @@ void CKPAdvectionPg2::OnItemchanged(NM_LISTVIEW* pNMListView, CCheckListCtrl& ch
 				}
 
 #if _MSC_VER >= 1600 // VS2010 (11.0)
-				// This is expected to work on VS2015 (14.0) and later, 
-				// but it has only been tested on VS2019 (16.x).
+				// This is expected to work on VS2010 (11.0) and later, 
+				// but it has only been tested on VS2010-VS2022 (17.13)
 				for (auto iter = std::next(setRanges.begin()); iter != setRanges.end();)
 				{
 					auto prev = std::prev(iter);
