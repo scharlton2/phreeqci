@@ -46,6 +46,36 @@ add_executable(phreeqci)
 # Build an executable with a WinMain entry point on windows.
 set_target_properties(phreeqci PROPERTIES WIN32_EXECUTABLE TRUE)
 
+set(RESOURCE_FILES
+  res/bitmap1.bmp
+  res/checks.bmp
+  res/ErrorItems.bmp
+  res/ico00001.ico
+  res/ico00002.ico
+  res/icon1.ico
+  res/idr_db.ico
+  res/input.ico
+  res/InputItems.bmp
+  res/litebulb.bmp
+  res/litebulb2.bmp
+  res/output.ico
+  res/OutputItems.bmp
+  res/phreeqci.exe.manifest
+  res/phreeqci2.ico
+  res/phreeqci2.rc2
+  res/resize_column.cur
+  res/resize_row.cur
+  res/RichDocIn.ico
+  res/Splsh16.bmp
+  res/TabItems.bmp
+  res/Toolbar.bmp
+  res/toolbar1.bmp
+  res/ToolbarForward.bmp
+  res/ToolbarInitCond.bmp
+  res/ToolbarPrint.bmp
+  res/ToolbarRun.bmp
+)
+
 target_sources(phreeqci
   PRIVATE
     AccelPropertySheet.cpp
@@ -469,7 +499,7 @@ target_sources(phreeqci
     # phreeqc3/src
     phreeqc3/src/advection.cpp
     phreeqc3/src/basicsubs.cpp
-    phreeqc3/src/chart_icon.gif
+    #phreeqc3/src/chart_icon.gif
     phreeqc3/src/ChartHandler.cpp
     phreeqc3/src/ChartHandler.h
     phreeqc3/src/ChartObject.cpp
@@ -536,7 +566,7 @@ target_sources(phreeqci
     phreeqc3/src/phqalloc.h
     phreeqc3/src/Phreeqc.cpp
     phreeqc3/src/Phreeqc.h
-    phreeqc3/src/phreex.ico
+    #phreeqc3/src/phreex.ico
     phreeqc3/src/PHRQ_io_output.cpp
     phreeqc3/src/pitzer_structures.cpp
     phreeqc3/src/pitzer.cpp
@@ -617,7 +647,11 @@ target_sources(phreeqci
     # Posea
     Posea/sizecbar.cpp
     Posea/sizecbar.h
+    # res
+    ${RESOURCE_FILES}
 )
+
+source_group("Resource Files" FILES ${RESOURCE_FILES})
 
 target_compile_definitions(phreeqci
   PRIVATE
